@@ -24,4 +24,3 @@ Tendremos que securizar todas las rutas para verificar si estamos logados antes 
 
 El ejercicio hay que hacerlo MODULAR, no puede ser un monolito, diferenciando el archivo inical con el servidor, los middlewares, autenticaciones, rutas, usuarios...
  
-

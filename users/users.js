@@ -1,9 +1,9 @@
 module.exports =  [
     {
       id: 1,
-      username: 'Luis',
-      password: 'Bravo',
-      name: 'Luis Carlos'
+      username: 'Veronica',
+      password: 'Perez',
+      name: 'Veronica Isabel'
     },
     {
       id: 2,
@@ -29,4 +29,21 @@ module.exports =  [
       password: 'password202',
       name: 'David Williams'
     }
-  ];
+];
+
+
+/*--->
+  Data de suarios simulados; que pueden reemplazados con una conexión a una base de datos en el futuro.
+  
+const bcrypt = require('bcryptjs');
+
+const users = [
+  {
+    username: 'admin',
+    password: bcrypt.hashSync('password', 10) // Contraseña 'password' hasheada
+  }
+];
+
+module.exports = users;
+
+<---*/

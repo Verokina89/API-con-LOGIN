@@ -4,6 +4,7 @@ const router = express.Router()
 const {tokenGenerator,userAuth} = require("../middlewares/middlewares")
 const { default: axios } = require("axios")
 const urlBase = 'https://rickandmortyapi.com/api/character'
+
 router.get("/",(req,res) => {
     const isUserLogged = req.session.token
     
@@ -125,4 +126,81 @@ router.use((req,res) => {
     res.send("⚠️ Page not found ⚠️")
 })
 
-module.exports =router
+module.exports = router
+
+/*---> 
+routes/routes.js (este es un archivo)
+Aquí definimos las rutas protegidas para acceder a la API de Rick and Morty.
+
+const express = require('express');
+const { isAuthenticated } = require('../middleware/authMiddleware');
+const axios = require('axios');
+const router = express.Router();
+
+// Ruta para la búsqueda de personajes
+router.get('/search', isAuthenticated, (req, res) => {
+  res.send(`
+    <form action="/character" method="GET">
+      <label>Nombre del personaje:</label>
+      <input type="text" name="name" required />
+      <button type="submit">Buscar</button>
+    </form>
+    <form action="/logout" method="POST">
+      <button type="submit">Logout</button>
+    </form>
+  `);
+});
+
+// Ruta para obtener un personaje por nombre
+router.get('/character', isAuthenticated, async (req, res) => {
+  const name = req.query.name;
+  
+  try {
+    const response = await axios.get(`https://rickandmortyapi.com/api/character/?name=${name}`);
+    const character = response.data.results[0];
+
+    res.send(`
+      <h1>${character.name}</h1>
+      <img src="${character.image}" alt="${character.name}" />
+      <p>Género: ${character.gender}</p>
+      <p>Estado: ${character.status}</p>
+      <a href="/search">Buscar otro personaje</a>
+    `);
+  } catch (error) {
+    res.send('Personaje no encontrado.');
+  }
+});
+
+module.exports = router;
+
+----------------------------------------------------
+routes/userRoutes.js (otro archivo en esta carpeta)
+Estas rutas manejarán el proceso de autenticación de usuarios.
+
+const express = require('express');
+const bcrypt = require('bcryptjs');
+const users = require('../users/users');
+const router = express.Router();
+
+// Ruta para login
+router.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+  const user = users.find(u => u.username === username);
+
+  if (!user) return res.status(401).send('Usuario no encontrado');
+  
+  const validPassword = await bcrypt.compare(password, user.password);
+  if (!validPassword) return res.status(401).send('Contraseña incorrecta');
+
+  req.session.user = user; // Guarda el usuario en la sesión
+  res.redirect('/search');
+});
+
+// Ruta para logout
+router.post('/logout', (req, res) => {
+  req.session.destroy(); // Destruye la sesión
+  res.redirect('/');
+});
+
+module.exports = router;
+<---*/
